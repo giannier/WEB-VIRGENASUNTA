@@ -1,0 +1,170 @@
+<?php
+$page_title = 'Trabaja con Nosotros | Virgen Asunta - Centro de Conciliación y Arbitraje';
+$page_description = 'Conoce a nuestro equipo directivo y postula para integrarte como conciliador, árbitro o profesional especializado en Virgen Asunta.';
+$canonical_path = '/trabaja-con-nosotros.html';
+require __DIR__ . '/partials/header.php';
+
+$staff_email = va_config()['staff_email'] ?? '{{EMAIL_STAFF}}';
+
+$va_directora_photo  = file_exists(VA_ROOT . '/assets/img/equipo-directora.jpg');
+$va_secretario_photo = file_exists(VA_ROOT . '/assets/img/equipo-secretario.jpg');
+$va_directora_pdf    = file_exists(VA_ROOT . '/assets/docs/resolucion-directora.pdf');
+$va_secretario_pdf   = file_exists(VA_ROOT . '/assets/docs/resolucion-secretario.pdf');
+?>
+
+<section class="page-hero page-hero--compact">
+  <div class="container">
+    <p class="breadcrumb"><a href="/">Inicio</a> / Trabaja con Nosotros</p>
+    <p class="kicker">Trabaja con Nosotros</p>
+    <h1>Únete a nuestro equipo</h1>
+    <p style="max-width:60ch;color:var(--color-text-on-dark-muted);">Conoce a nuestro equipo directivo y postula para integrarte como conciliador, árbitro o profesional especializado.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div data-tabs>
+      <div class="tabs__list" role="tablist" aria-label="Trabaja con Nosotros">
+        <button type="button" id="tabEquipoBtn" class="tabs__btn" role="tab" aria-selected="true" aria-controls="tabEquipo" tabindex="0">Nuestro equipo de trabajo</button>
+        <button type="button" id="tabStaffBtn" class="tabs__btn" role="tab" aria-selected="false" aria-controls="tabStaff" tabindex="-1">Únete a nuestro staff</button>
+      </div>
+
+      <!-- ---------- Tab 1: Nuestro equipo de trabajo ---------- -->
+      <div id="tabEquipo" class="tabs__panel" role="tabpanel" aria-labelledby="tabEquipoBtn">
+        <div class="team-grid">
+
+          <article>
+            <?php if ($va_directora_photo): ?>
+            <div class="photo-panel team-member__photo" style="background-image:url('/assets/img/equipo-directora.jpg');" role="img" aria-label="Abg. Vilma Aurora Noriega Castro, Directora General"></div>
+            <?php else: ?>
+            <div class="photo-panel" role="img" aria-label="Directora General"></div>
+            <?php endif; ?>
+            <h2 class="team-member__name">Abg. Vilma Aurora Noriega Castro</h2>
+            <p class="team-member__title">Directora General</p>
+            <p class="text-muted">Conciliadora Extrajudicial Reg. N.° 93838. Responsable de la dirección institucional del Centro de Conciliación y Arbitraje.</p>
+
+            <p class="kicker" style="margin-top:var(--space-lg);">Resolución de acreditación</p>
+            <?php if ($va_directora_pdf): ?>
+            <div class="pdf-frame">
+              <iframe src="/assets/docs/resolucion-directora.pdf#toolbar=0&navpanes=0&scrollbar=0" title="Resolución de acreditación — Directora General" loading="lazy"></iframe>
+            </div>
+            <p class="pdf-frame__note">Documento disponible solo para visualización.</p>
+            <?php else: ?>
+            <div class="pdf-frame"><p class="pdf-frame__unavailable">Resolución próximamente disponible.</p></div>
+            <?php endif; ?>
+          </article>
+
+          <article>
+            <?php if ($va_secretario_photo): ?>
+            <div class="photo-panel team-member__photo" style="background-image:url('/assets/img/equipo-secretario.jpg');" role="img" aria-label="Jorge Enrique Ortega Noriega, Secretario General"></div>
+            <?php else: ?>
+            <div class="photo-panel" role="img" aria-label="Secretario General"></div>
+            <?php endif; ?>
+            <h2 class="team-member__name">Jorge Enrique Ortega Noriega</h2>
+            <p class="team-member__title">Secretario General</p>
+            <p class="text-muted">Conciliador Extrajudicial Reg. N.° 89033. A cargo de la secretaría general y la coordinación de los procedimientos del Centro.</p>
+
+            <p class="kicker" style="margin-top:var(--space-lg);">Resolución de acreditación</p>
+            <?php if ($va_secretario_pdf): ?>
+            <div class="pdf-frame">
+              <iframe src="/assets/docs/resolucion-secretario.pdf#toolbar=0&navpanes=0&scrollbar=0" title="Resolución de acreditación — Secretario General" loading="lazy"></iframe>
+            </div>
+            <p class="pdf-frame__note">Documento disponible solo para visualización.</p>
+            <?php else: ?>
+            <div class="pdf-frame"><p class="pdf-frame__unavailable">Resolución próximamente disponible.</p></div>
+            <?php endif; ?>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- ---------- Tab 2: Únete a nuestro staff ---------- -->
+      <div id="tabStaff" class="tabs__panel" role="tabpanel" aria-labelledby="tabStaffBtn" hidden>
+        <div class="split">
+          <div>
+            <p class="kicker">Convocatoria</p>
+            <h2>Postula al staff</h2>
+            <hr class="divider">
+            <p class="text-muted" style="max-width:60ch;">Buscamos conciliadores, árbitros y profesionales especializados en materia familiar, ambiental, laboral, comercial y de contrataciones con el Estado.</p>
+
+            <form id="staffForm" class="form" novalidate data-staff-email="<?= va_e($staff_email) ?>" style="margin-top:var(--space-lg);">
+              <div class="form__status" data-form-status></div>
+
+              <div class="form__row form__row--2">
+                <div class="field">
+                  <label for="staffName">Nombre completo <span class="required">*</span></label>
+                  <input type="text" id="staffName" name="name" maxlength="150" required autocomplete="name">
+                  <span class="field__error">Ingresa tu nombre completo.</span>
+                </div>
+                <div class="field">
+                  <label for="staffDni">DNI <span class="required">*</span></label>
+                  <input type="text" id="staffDni" name="dni" maxlength="15" required pattern="[0-9A-Za-z\-]{6,15}">
+                  <span class="field__error">Ingresa un DNI válido.</span>
+                </div>
+              </div>
+
+              <div class="form__row form__row--2">
+                <div class="field">
+                  <label for="staffPhone">Teléfono <span class="required">*</span></label>
+                  <input type="tel" id="staffPhone" name="phone" maxlength="20" required autocomplete="tel" pattern="[0-9+()\-\s]{6,20}">
+                  <span class="field__error">Ingresa un teléfono válido.</span>
+                </div>
+                <div class="field">
+                  <label for="staffEmail">Correo electrónico <span class="required">*</span></label>
+                  <input type="email" id="staffEmail" name="email" maxlength="150" required autocomplete="email">
+                  <span class="field__error">Ingresa un correo electrónico válido.</span>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="staffProfession">Profesión / Especialidad <span class="required">*</span></label>
+                <input type="text" id="staffProfession" name="profession" maxlength="150" required>
+                <span class="field__error">Indica tu profesión o especialidad.</span>
+              </div>
+
+              <div class="field">
+                <label for="staffArea">Área de interés <span class="required">*</span></label>
+                <select id="staffArea" name="area" required>
+                  <option value="">Selecciona una opción</option>
+                  <option value="Conciliación Familiar">Conciliación Familiar</option>
+                  <option value="Conciliación Ambiental">Conciliación Ambiental</option>
+                  <option value="Conciliación Laboral">Conciliación Laboral</option>
+                  <option value="Conciliación Comercial">Conciliación Comercial</option>
+                  <option value="Conciliación en Contrataciones del Estado">Conciliación en Contrataciones del Estado</option>
+                  <option value="Centro de Arbitraje">Centro de Arbitraje</option>
+                  <option value="Otro">Otro</option>
+                </select>
+                <span class="field__error">Selecciona el área de tu interés.</span>
+              </div>
+
+              <div class="field">
+                <label for="staffMessage">Carta de presentación <span class="required">*</span></label>
+                <textarea id="staffMessage" name="message" maxlength="2000" required></textarea>
+                <span class="field__error">Cuéntanos brevemente tu experiencia y motivación.</span>
+              </div>
+
+              <button type="submit" class="btn btn--primary">Enviar postulación</button>
+              <p class="field__hint">Al enviar este formulario se abrirá tu cliente de correo — adjunta tu CV manualmente antes de enviarlo.</p>
+            </form>
+          </div>
+
+          <div>
+            <div class="info-block">
+              <h3>Perfiles que buscamos</h3>
+              <p class="text-muted">Conciliadores y árbitros acreditados, con especialización en alguna de nuestras materias de atención.</p>
+            </div>
+            <div class="info-block">
+              <h3>Proceso de selección</h3>
+              <p class="text-muted">Revisamos cada postulación y nos contactaremos con los perfiles que se ajusten a las vacantes disponibles.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<?php require __DIR__ . '/partials/footer.php'; ?>
+<script src="/assets/js/tabs.js" defer></script>
+<script src="/assets/js/staff-form.js" defer></script>

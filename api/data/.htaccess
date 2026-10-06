@@ -1,0 +1,9 @@
+# Defense in depth: this folder holds the rate-limit SQLite/JSON store and
+# must never be directly web-accessible, even though it also sits outside
+# any public autoindex.
+<IfModule mod_authz_core.c>
+    Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+    Deny from all
+</IfModule>

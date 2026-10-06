@@ -1,0 +1,286 @@
+/*
+ * Base layer: reset, typography, layout primitives.
+ * Depends on tokens.css being loaded first.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+  color: var(--color-text);
+  background: var(--color-bg);
+  /* explicit (not relied-on-implicitly): the light-background default that
+     dark sections below override on their own container, letting p inherit */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  /* Long unbroken strings (emails, legal reference numbers) must wrap
+     instead of overflowing narrow mobile containers; inherited site-wide. */
+  overflow-wrap: break-word;
+}
+
+img,
+picture,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+img {
+  height: auto;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  line-height: var(--lh-tight);
+  margin: 0 0 var(--space-sm);
+  color: var(--color-navy);
+}
+
+h1 {
+  font-size: var(--fs-4xl);
+  font-weight: 700;
+}
+
+h2 {
+  font-size: var(--fs-2xl);
+}
+
+h3 {
+  font-size: var(--fs-xl);
+}
+
+h4 {
+  font-size: var(--fs-md);
+}
+
+p {
+  margin: 0 0 var(--space-sm);
+  /* Inherit instead of hardcoding navy: .site-footer, .section--dark and
+     .section--darker set a light color on their container and expect it to
+     cascade down to child <p> tags. A directly-matching `color: var(--color-text)`
+     here would always win over that inherited value regardless of specificity,
+     so plain paragraphs on dark backgrounds rendered navy-on-navy (invisible).
+     body{} sets color: var(--color-text) explicitly, so light-background pages
+     are unaffected. */
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input,
+textarea,
+select,
+button {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+svg {
+  fill: none;
+  stroke: currentColor;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -48px;
+  left: var(--space-sm);
+  background: var(--color-navy);
+  color: var(--color-white);
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  z-index: var(--z-modal);
+  transition: top var(--duration-base) var(--ease-standard);
+}
+
+.skip-link:focus {
+  top: var(--space-sm);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+/* Layout primitives */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-md);
+}
+
+.container--narrow {
+  max-width: var(--container-narrow);
+}
+
+.section {
+  padding-block: var(--space-2xl);
+}
+
+.section--tight {
+  padding-block: var(--space-xl);
+}
+
+.section--dark {
+  background: var(--color-bg-dark);
+  color: var(--color-text-on-dark);
+}
+
+.section--darker {
+  background: var(--color-bg-darker);
+  color: var(--color-text-on-dark);
+}
+
+.section--dark h1,
+.section--dark h2,
+.section--dark h3,
+.section--dark h4,
+.section--darker h1,
+.section--darker h2,
+.section--darker h3,
+.section--darker h4 {
+  color: var(--color-white);
+}
+
+.section--white {
+  background: var(--color-bg-alt);
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+@media (min-width: 640px) {
+  .grid--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .grid--4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .grid--5 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .grid--5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.kicker {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: var(--space-2xs);
+}
+
+.divider {
+  /* Removed sitewide: the thin gold underline under every section kicker
+     read as an overused, templated pattern. display:none (rather than
+     deleting the <hr class="divider"> from 13 files) keeps the markup
+     untouched while removing the visual and its layout space. */
+  display: none;
+}
+
+.divider--center {
+  margin-inline: auto;
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity var(--duration-slow) var(--ease-standard),
+    transform var(--duration-slow) var(--ease-standard);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+.no-scroll {
+  overflow: hidden;
+}

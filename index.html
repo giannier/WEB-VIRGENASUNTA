@@ -1,0 +1,151 @@
+<?php
+$page_title = 'Virgen Asunta - Centro de Conciliación y Arbitraje | Lima, Perú';
+$page_description = 'Diálogo que construye soluciones. Centro de Conciliación y Arbitraje en Jesús María, Lima: conciliación familiar, ambiental, laboral, comercial, en contrataciones del Estado y arbitraje especializado.';
+$canonical_path = '/';
+
+$json_ld = json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'LegalService',
+    'name' => 'Virgen Asunta - Centro de Conciliación y Arbitraje',
+    'address' => [
+        '@type' => 'PostalAddress',
+        'streetAddress' => 'Av. República de Chile 324, Oficina 601',
+        'addressLocality' => 'Jesús María',
+        'addressRegion' => 'Lima',
+        'addressCountry' => 'PE',
+    ],
+    'areaServed' => 'PE',
+    'slogan' => 'Diálogo que construye soluciones',
+], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+require __DIR__ . '/partials/header.php';
+?>
+
+<?php
+  /* hero-background.jpg now shows the two partners in an office scene (wide
+     environmental shot, not a tight portrait) — the full hero background
+     photo already covers "the people" content. A separate .hero__portrait
+     box would just duplicate them awkwardly next to their own photo, so it
+     only renders when a distinct, tighter hero-people.jpg is separately
+     provided; otherwise the hero stays a single, full-width text column
+     over the background photo. */
+  $va_hero_portrait = file_exists(VA_ROOT . '/assets/img/hero-people.jpg');
+?>
+<section class="hero">
+  <div class="hero__glow" aria-hidden="true"></div>
+  <div class="container hero__grid<?= $va_hero_portrait ? '' : ' hero__grid--full' ?>">
+    <div class="hero__content">
+      <p class="kicker hero__eyebrow">Centro de Conciliación y Arbitraje</p>
+      <h1 class="hero__title">Diálogo que construye soluciones</h1>
+      <p class="hero__lede">Resolvemos controversias familiares, laborales, comerciales, ambientales y de contrataciones con el Estado a través de la conciliación extrajudicial y el arbitraje, con la rapidez, confidencialidad y respaldo legal que tu caso merece.</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="/contacto.html">Agendar consulta</a>
+        <a class="btn btn--outline-light" href="/conciliacion-extrajudicial/">Conocer nuestros servicios</a>
+      </div>
+    </div>
+    <?php if ($va_hero_portrait): ?>
+    <div class="hero__portrait" role="img" aria-label="Equipo de Virgen Asunta acompañando a sus clientes"></div>
+    <?php endif; ?>
+  </div>
+</section>
+
+<section class="section section--white">
+  <div class="container">
+    <p class="kicker">Nuestros servicios</p>
+    <h2>Conciliación Extrajudicial</h2>
+    <hr class="divider">
+    <p class="text-muted" style="max-width:60ch;">Cinco especialidades claramente separadas, cada una atendida por conciliadores acreditados y especializados en su materia.</p>
+
+    <div class="grid grid--3 grid--dividers" style="margin-top:var(--space-lg);">
+      <article class="branch-card reveal">
+        <p class="branch-card__number">01</p>
+        <h3 class="card__title">Familiar</h3>
+        <p class="text-muted">Alimentos, tenencia, régimen de visitas y otras materias de familia.</p>
+        <a class="card__link" href="/conciliacion-extrajudicial/familiar.html">Ver más <svg class="icon" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </article>
+
+      <article class="branch-card reveal">
+        <p class="branch-card__number">02</p>
+        <h3 class="card__title">Ambiental</h3>
+        <p class="text-muted">Controversias vinculadas a impacto y responsabilidad ambiental.</p>
+        <a class="card__link" href="/conciliacion-extrajudicial/ambiental.html">Ver más <svg class="icon" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </article>
+
+      <article class="branch-card reveal">
+        <p class="branch-card__number">03</p>
+        <h3 class="card__title">Laboral</h3>
+        <p class="text-muted">Beneficios sociales y otras controversias derivadas de la relación laboral.</p>
+        <a class="card__link" href="/conciliacion-extrajudicial/laboral.html">Ver más <svg class="icon" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </article>
+
+      <article class="branch-card reveal">
+        <p class="branch-card__number">04</p>
+        <h3 class="card__title">Comercial</h3>
+        <p class="text-muted">Acuerdos y controversias entre empresas que evitan procesos judiciales largos.</p>
+        <a class="card__link" href="/conciliacion-extrajudicial/comercial.html">Ver más <svg class="icon" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </article>
+
+      <article class="branch-card reveal">
+        <p class="branch-card__number">05</p>
+        <h3 class="card__title">Contrataciones del Estado</h3>
+        <p class="text-muted">Soluciones eficientes para entidades públicas y sus contratistas.</p>
+        <a class="card__link" href="/conciliacion-extrajudicial/contrataciones-estado.html">Ver más <svg class="icon" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </article>
+
+      <!-- Sixth grid cell: 5 service cards in a 3-column grid leave one cell
+           free in the last row — used here as a photo slot instead of empty
+           space. Same layered-background hook as .photo-panel--nosotros /
+           --arbitraje-band: gradient now, real photo the moment the client
+           adds assets/img/conciliacion-destacado.jpg, no code changes needed. -->
+      <div class="photo-panel photo-panel--conciliacion reveal" role="img" aria-label="Equipo de Virgen Asunta en sesión de conciliación"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--darker section--arbitraje-teaser">
+  <div class="container">
+    <p class="kicker">Sección independiente</p>
+    <h2>Centro de Arbitraje</h2>
+    <hr class="divider">
+    <p style="max-width:60ch;color:var(--color-text-on-dark-muted);">Un mecanismo alterno de resolución de controversias con la solidez, independencia y confidencialidad que exigen los casos de mayor complejidad.</p>
+    <a class="btn btn--outline-light" href="/centro-arbitraje/" style="margin-top:var(--space-md);">Conocer el Centro de Arbitraje</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container split">
+    <div>
+      <p class="kicker">Nosotros</p>
+      <h2>Compromiso institucional con la solución de conflictos</h2>
+      <hr class="divider">
+      <p>Somos un centro autorizado dedicado a acompañar a personas, familias, empresas y entidades del Estado en la búsqueda de soluciones rápidas, confidenciales y efectivas frente a sus controversias.</p>
+      <a class="btn btn--outline" href="/nosotros.html">Conocer más sobre nosotros</a>
+    </div>
+    <div class="trust-strip">
+      <div class="trust-strip__item">
+        <h3 style="margin-bottom:0;">5</h3>
+        <p class="text-muted">Especialidades de conciliación extrajudicial</p>
+      </div>
+      <div class="trust-strip__item">
+        <h3 style="margin-bottom:0;">100%</h3>
+        <p class="text-muted">Confidencialidad en cada procedimiento</p>
+      </div>
+      <div class="trust-strip__item">
+        <h3 style="margin-bottom:0;">1</h3>
+        <p class="text-muted">Centro de Arbitraje especializado</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="cta-banner reveal">
+      <h2>¿Listo para resolver tu controversia mediante el diálogo?</h2>
+      <p style="color:var(--color-text-on-dark-muted);max-width:56ch;margin-inline:auto;">Agenda una consulta con nuestro equipo y conoce la vía más adecuada para tu caso.</p>
+      <a class="btn btn--primary" href="/contacto.html" style="margin-top:var(--space-md);">Agendar consulta</a>
+    </div>
+  </div>
+</section>
+
+<?php require __DIR__ . '/partials/footer.php'; ?>

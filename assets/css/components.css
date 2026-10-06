@@ -1,0 +1,1803 @@
+/*
+ * Components: nav, buttons, cards, footer, forms, badges, hero, service
+ * grids, arbitration pillars, complaints form. Depends on tokens.css.
+ */
+
+/* ---------- Page loader ----------
+   Full-screen splash shown on every page load, large full logo lockup,
+   faded out by main.js once the page is ready (see .page-loader--hidden).
+   prefers-reduced-motion gets an instant show/hide, no animation — see the
+   reduced-motion block at the end of this section. */
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-loader);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-navy-dark);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.6s var(--ease-standard), visibility 0.6s var(--ease-standard);
+}
+
+/* Flex items default to min-width:auto, which can stop them shrinking
+   below their content's INTRINSIC size (here, the logo <img>'s native
+   1661px width) regardless of an explicit CSS width on that content —
+   confirmed with a real screenshot: the logo rendered far wider than its
+   min(62vw,360px) rule and overflowed a 390px mobile viewport edge to
+   edge. The direct flex child is the unstyled <picture> wrapper, not the
+   img itself, so this resets ITS min-width explicitly. */
+.page-loader > picture {
+  min-width: 0;
+}
+
+.page-loader--hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Watermark, behind and taller than the logo (client's own wording): the
+   Virgin Mary statue sits centered and large, low-opacity. The class (and
+   therefore position:absolute) is on the <picture> element itself, not
+   just the inner <img> — <picture> is a flex item here too, and an
+   absolutely positioned child alone doesn't reliably keep its wrapper
+   out of the flex row in every engine, which is what pushed the logo
+   sideways instead of stacking the two centered on top of each other.
+   Declared before .page-loader__logo in the markup so normal stacking
+   order alone puts the logo on top — no z-index needed. */
+.page-loader__watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* Explicit width AND height (not width:auto cascading through <picture>
+     from a percentage-height img) — that indirection was reported as
+     looking "squashed" on mobile. object-fit:contain on the img below is
+     what actually guarantees the real aspect ratio either way, so this box
+     can just be generous without risk of distorting the photo. Sized up
+     a bit per the client's ask to occupy more space. */
+  width: min(88vw, 640px);
+  height: min(85vh, 860px);
+  pointer-events: none;
+  /* Dedicated keyframes (not the shared page-loader-in) because this
+     element's centering ALSO lives in `transform` (translate(-50%,-50%)).
+     A CSS animation's transform value fully replaces the base transform
+     for the animated property — it doesn't merge with it — so reusing a
+     scale-only keyframe here wiped out the translate and the centering
+     with it, which is exactly the bug just confirmed with a real headless
+     screenshot: top:50%/left:50% alone (no translate) anchors the
+     element's top-left corner at the viewport center instead of its
+     middle, which is why it rendered bottom-right instead of centered. */
+  animation: page-loader-watermark-in 1.3s var(--ease-standard) both;
+}
+
+@keyframes page-loader-watermark-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.page-loader__watermark img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* contain guarantees the photo's real aspect ratio is always preserved
+     (letterboxed inside the box above if needed) — no distortion possible
+     regardless of how the box itself is sized. */
+  object-fit: contain;
+  /* Less transparent than the first pass (0.14 → 0.22) so it actually
+     reads as a deliberate watermark instead of nearly disappearing. */
+  opacity: 0.22;
+}
+
+.page-loader__logo {
+  position: relative;
+  width: min(62vw, 360px);
+  height: auto;
+  animation: page-loader-in 0.9s var(--ease-standard) both;
+}
+
+@keyframes page-loader-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (min-width: 640px) {
+  .page-loader__logo {
+    width: min(40vw, 420px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-loader {
+    transition: none;
+  }
+  .page-loader__logo {
+    animation: none;
+  }
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2xs);
+  min-height: 48px;
+  padding: 0.85rem 1.75rem;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  transition: background var(--duration-base) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard),
+    transform var(--duration-base) var(--ease-standard);
+}
+
+.btn--primary {
+  background: var(--gradient-gold);
+  color: var(--color-navy-dark);
+}
+
+.btn--primary:hover,
+.btn--primary:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn--outline {
+  background: transparent;
+  color: var(--color-navy);
+  border-color: var(--color-navy);
+}
+
+.btn--outline:hover,
+.btn--outline:focus-visible {
+  background: var(--color-navy);
+  color: var(--color-white);
+}
+
+.btn--outline-light {
+  background: transparent;
+  color: var(--color-white);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn--outline-light:hover,
+.btn--outline-light:focus-visible {
+  background: var(--color-white);
+  color: var(--color-navy);
+  border-color: var(--color-white);
+}
+
+.btn--block {
+  width: 100%;
+}
+
+/* ---------- Site header / nav ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-nav);
+  background: rgba(248, 246, 241, 0.94);
+  backdrop-filter: saturate(180%) blur(8px);
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard);
+  /* Approx rendered height of the .nav row (logo + padding + border), used
+     to cap the open mobile panel so it never grows past the viewport. */
+  --header-h: 80px;
+}
+
+/* Scrolled state (class toggled by main.js past a small scroll threshold):
+   inverts the header to a solid navy-dark background, flips nav text to a
+   light color, and swaps to the reversed/white logo export. */
+.site-header.is-scrolled {
+  background: rgba(11, 27, 51, 0.96);
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+
+.site-header.is-scrolled .nav__link {
+  color: var(--color-text-on-dark);
+}
+
+.site-header.is-scrolled .nav__link:hover,
+.site-header.is-scrolled .nav__link:focus-visible,
+.site-header.is-scrolled .nav__link[aria-current="page"] {
+  color: var(--color-gold-light);
+  border-color: var(--color-gold-light);
+}
+
+/* The dropdown submenu panel is always a light/white floating card (see
+   .nav__submenu-panel), independent of the header's own scrolled state —
+   without this override, the .is-scrolled rule above bled its light text
+   color into the panel too, making the links nearly invisible on white. */
+.site-header.is-scrolled .nav__submenu-panel .nav__link {
+  color: var(--color-navy);
+}
+
+.site-header.is-scrolled .nav__submenu-panel .nav__link:hover,
+.site-header.is-scrolled .nav__submenu-panel .nav__link:focus-visible {
+  background: var(--color-cream);
+  color: var(--color-navy);
+  border-color: transparent;
+}
+
+.site-header.is-scrolled .nav__toggle {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.site-header.is-scrolled .nav__toggle span {
+  background: var(--color-cream);
+}
+
+/* Logo swap: both pictures render, CSS shows only the one matching state
+   (avoids a JS image-swap, which would otherwise flash/reflow on toggle). */
+.nav__logo--scrolled {
+  display: none;
+}
+
+.site-header.is-scrolled .nav__logo--default {
+  display: none;
+}
+
+.site-header.is-scrolled .nav__logo--scrolled {
+  display: block;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: var(--space-xs);
+  gap: var(--space-md);
+}
+
+.nav__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  flex-shrink: 0;
+}
+
+.nav__logo-img {
+  height: 44px;
+  width: auto;
+}
+
+/* Mobile: center the logo as the bar's focal point (independent of the
+   hamburger toggle's width) instead of left-aligning it next to the menu
+   button, and let it take up most of the bar's height. .nav__brand is
+   pulled out of flow so its size no longer has to share space with the
+   toggle — margin-left:auto keeps the toggle pinned right regardless. */
+@media (max-width: 959px) {
+  .nav {
+    position: relative;
+  }
+  .nav__brand {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .nav__logo-img {
+    height: 60px;
+  }
+  .nav__toggle {
+    margin-left: auto;
+  }
+}
+
+.nav__list {
+  display: none;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.nav__link {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-navy);
+  padding: var(--space-2xs) 0;
+  border-bottom: 2px solid transparent;
+  transition: border-color var(--duration-base) var(--ease-standard),
+    color var(--duration-base) var(--ease-standard);
+}
+
+.nav__link:hover,
+.nav__link:focus-visible,
+.nav__link[aria-current="page"] {
+  color: var(--color-gold);
+  border-color: var(--color-gold);
+}
+
+.nav__cta {
+  display: none;
+}
+
+.nav__toggle {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.nav__toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--color-navy);
+  transition: transform var(--duration-base) var(--ease-standard),
+    opacity var(--duration-base) var(--ease-standard);
+}
+
+.nav__toggle[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav__toggle[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav__toggle[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Open/close is driven by max-height + opacity + visibility instead of a
+   display swap, so the panel slides/fades instead of snapping instantly.
+   visibility is delayed on close (matching the max-height duration) so
+   links stay tappable while they're still visually fading out, and hides
+   only once the collapse finishes so nothing invisible remains tappable. */
+.nav__mobile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  padding: 0 0 var(--space-md);
+  max-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: max-height var(--duration-slow) var(--ease-standard),
+    opacity var(--duration-base) var(--ease-standard),
+    padding-top var(--duration-slow) var(--ease-standard),
+    visibility 0s linear var(--duration-slow);
+}
+
+.nav__mobile.is-open {
+  /* Big enough to clear typical content, capped to the viewport minus the
+     header so a long panel (5 + 4 submenu links + CTA) scrolls internally
+     via overflow-y instead of pushing the CTA off-screen. */
+  max-height: calc(100vh - var(--header-h));
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+  opacity: 1;
+  visibility: visible;
+  transition: max-height var(--duration-slow) var(--ease-standard),
+    opacity var(--duration-base) var(--ease-standard),
+    padding-top var(--duration-slow) var(--ease-standard),
+    visibility 0s linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav__mobile,
+  .nav__mobile.is-open {
+    transition-delay: 0s;
+  }
+}
+
+.nav__mobile .nav__link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-xs) var(--space-2xs);
+  min-height: 44px;
+}
+
+/* Justice-icon prefix replacing the plain "— " text on submenu items:
+   client-supplied navy PNGs (handshake for Conciliación branches, gavel for
+   Arbitraje pillars), keyed out from their checkerboard background and
+   recolored to brand navy. Fixed height, auto width so each icon's own
+   aspect ratio (handshake is wider, gavel/scale/lawyer are taller) isn't
+   distorted. */
+.nav__submenu-icon {
+  height: 16px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.nav__mobile .nav__submenu {
+  padding-left: var(--space-md);
+  display: flex;
+  flex-direction: column;
+}
+
+.nav__mobile .btn {
+  margin-top: var(--space-2xs);
+}
+
+@media (min-width: 960px) {
+  .nav__list {
+    display: flex;
+  }
+  /* Nav labels were shortened ("Conciliación Extrajudicial" →
+     "Conciliación", "Centro de Arbitraje" → "Arbitraje") specifically to
+     free up room for this — back to the full --fs-sm size instead of the
+     cramped --fs-xs a 6-item row needed before. */
+  .nav__list .nav__link {
+    font-size: var(--fs-sm);
+    white-space: nowrap;
+  }
+  .nav {
+    gap: var(--space-md);
+  }
+  .nav__toggle,
+  .nav__mobile {
+    display: none;
+  }
+  .nav__item--has-submenu {
+    position: relative;
+  }
+  /* .nav__submenu is the full hoverable hit-box: it sits flush against the
+     trigger link (top: 100%, no gap) so the mouse never crosses dead space
+     that isn't owned by any element — that gap was what closed the menu
+     before a click on a sub-item could register. Visual breathing room is
+     recreated with padding-top instead of a margin/gap, which keeps that
+     space inside the hoverable box. All the actual visual chrome (background,
+     shadow, radius, min-width) now lives on the inner .nav__submenu-panel. */
+  .nav__submenu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding-top: var(--space-sm);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--duration-base) var(--ease-standard);
+  }
+  .nav__item--has-submenu:hover .nav__submenu,
+  .nav__item--has-submenu:focus-within .nav__submenu {
+    opacity: 1;
+    visibility: visible;
+  }
+  .nav__submenu-panel {
+    background: var(--color-white);
+    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius-md);
+    padding: var(--space-2xs);
+    min-width: 260px;
+  }
+  .nav__submenu .nav__link {
+    display: block;
+    padding: var(--space-2xs) var(--space-sm);
+    text-transform: none;
+    letter-spacing: normal;
+    font-weight: 500;
+    border-bottom: 0;
+    border-radius: var(--radius-sm);
+  }
+  .nav__submenu .nav__link:hover,
+  .nav__submenu .nav__link:focus-visible {
+    background: var(--color-cream);
+    color: var(--color-navy);
+    border-color: transparent;
+  }
+}
+
+/* The "Agendar consulta" header button only reappears once there's real
+   room for it — at 960-1199px (e.g. iPad landscape, small laptops) the 6
+   nav items alone already fill the row; adding the CTA there clipped it
+   off-screen (verified at 1024px). It's not lost in that range: the same
+   CTA already repeats in the hero, the footer, and every page's closing
+   banner. */
+@media (min-width: 1200px) {
+  .nav__cta {
+    display: inline-flex;
+    white-space: nowrap;
+  }
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  /* Placeholder path: el cliente aún no entrega la foto; hasta entonces el
+     background-image no carga y queda el background-color navy sólido
+     (sin degradado encima) como fondo final. En cuanto se coloque el
+     archivo real se activa solo, SIN ninguna capa de color tiñéndolo —
+     pedido explícito del cliente: nada de overlay azul sobre las fotos. */
+  background-color: var(--color-navy-dark);
+  background-image: url('/assets/img/hero-background.jpg');
+  /* Back to full-bleed cover per the client's call (contain was tried and
+     explicitly rolled back): fills the whole hero edge-to-edge, cropping
+     whatever overflows rather than showing the full photo letterboxed.
+     Biased up from dead-center (25%) so heads stay in frame instead of
+     being cropped at the top — verified by simulating the actual crop. */
+  background-size: cover;
+  background-position: center 25%;
+  color: var(--color-text-on-dark);
+  overflow: hidden;
+}
+
+@media (max-width: 899px) {
+  .hero {
+    /* Cover crops heavily left/right too on a narrower box — plain center
+       X showed only the man, cutting the second person out almost
+       entirely (verified by simulating the actual crop). 68% shifts the
+       visible window right, toward where both people stand in the source
+       photo; 20% keeps faces in frame vertically. Applies to the 640-899px
+       tablet range; mobile below overrides both image and position again. */
+    background-position: 68% 20%;
+  }
+}
+
+@media (max-width: 639px) {
+  .hero {
+    /* Client-supplied portrait crop, purpose-composed for narrow mobile
+       widths (both people + desk/skyline/logo already well-framed for a
+       tall box) — swapped in only below the tablet breakpoint; tablet and
+       desktop keep the wide photo above untouched. Declared after the
+       tablet rule above so its plain "center" wins at widths where both
+       media queries would otherwise match. */
+    background-image: url('/assets/img/hero-background-mobile.jpg');
+    background-position: center;
+  }
+}
+
+/* Was a decorative gold radial glow + top line, designed for the plain
+   gradient placeholder background. Now that a real photo fills the hero,
+   any tint here reads as an unwanted band shifting the photo's tone —
+   removed per the client's "no color overlay on photos" instruction.
+   Kept as an empty, invisible element (not deleted) purely so it still
+   exists in the DOM as the hero parallax's scroll target in scroll-fx.js —
+   with no background, the parallax now just animates nothing visible,
+   which is a harmless no-op rather than a JS error. */
+.hero__glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Two-column content layer sitting on top of the gradient/glow background
+   above: text left, portrait right. Single column below the tablet
+   breakpoint (text first, portrait below). */
+.hero__grid {
+  position: relative;
+  display: grid;
+  gap: var(--space-xl);
+  align-items: center;
+  padding-block: var(--space-2xl);
+}
+
+@media (min-width: 900px) {
+  .hero__grid {
+    grid-template-columns: 1.15fr 0.85fr;
+    padding-block: var(--space-3xl);
+  }
+  /* No separate hero-people.jpg provided: stay single-column and let
+     .hero__content sit at its own max-width over the full background
+     photo, instead of leaving an empty second column. */
+  .hero__grid--full {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hero__content {
+  max-width: 640px;
+}
+
+.hero__eyebrow {
+  color: var(--color-gold-light);
+}
+
+.hero__title {
+  color: var(--color-white);
+  font-size: clamp(2.25rem, 5vw, var(--fs-4xl));
+  max-width: 14ch;
+}
+
+/* Word-span wrapper produced by scroll-fx.js's manual split (no SplitText
+   plugin); plain inline span when JS never runs, so the heading degrades
+   to normal text with zero animation. */
+.hero__title .word {
+  display: inline-block;
+}
+
+.hero__lede {
+  /* White instead of the muted gray-blue token: that muted color was tuned
+     for a flat navy background, and reads with much lower contrast now
+     that the hero sits over a real photo. */
+  color: var(--color-text-on-dark);
+  font-size: var(--fs-md);
+  max-width: 46ch;
+  margin-bottom: var(--space-md);
+}
+
+/* Subtle shadow as a legibility safety net for all hero text now that it
+   sits directly on a photo (no color overlay, per the client's "no tint on
+   photos" instruction) rather than a flat, predictable background. */
+.hero__eyebrow,
+.hero__title,
+.hero__lede {
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* ---------- Hero portrait (layered-background photo hook) ---------- */
+/* Same safe technique as .hero above: a solid navy background-color is the
+   fallback, with the real photo as a single, untinted background-image
+   layer on top (no gradient/overlay darkening it once it's uploaded). */
+.hero__portrait {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  max-width: 420px;
+  margin-inline: auto;
+  background-color: var(--color-navy-dark);
+  background-image: url('/assets/img/hero-people.jpg');
+  background-size: cover;
+  background-position: center;
+  outline: 1px solid rgba(var(--color-gold-rgb), 0.55);
+  outline-offset: 10px;
+}
+
+/* Faint oversized monogram watermark, echoing the "VA" ribbon mark used in
+   the favicon/logo, visible only while the placeholder gradient shows
+   through (a real photo simply paints over it). */
+.hero__portrait::before {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M14 14 L27 42 L32 30 L37 42 L50 14' fill='none' stroke='%23C9A15A' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E") center / 55% no-repeat;
+  opacity: 0.14;
+  pointer-events: none;
+}
+
+/* Corner-accent frame marks (gallery-label style) instead of a boxed shadow. */
+.hero__portrait::after {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--color-gold-light), var(--color-gold-light)) top left / 28px 2px no-repeat,
+    linear-gradient(var(--color-gold-light), var(--color-gold-light)) top left / 2px 28px no-repeat,
+    linear-gradient(var(--color-gold-light), var(--color-gold-light)) bottom right / 28px 2px no-repeat,
+    linear-gradient(var(--color-gold-light), var(--color-gold-light)) bottom right / 2px 28px no-repeat;
+}
+
+@media (max-width: 899px) {
+  .hero__portrait {
+    max-width: 320px;
+  }
+}
+
+/* ---------- Page (interior) hero ---------- */
+.page-hero {
+  background: linear-gradient(180deg, var(--color-navy) 0%, var(--color-navy-dark) 100%);
+  color: var(--color-text-on-dark);
+  padding-block: var(--space-xl);
+}
+
+/* Centro de Arbitraje only: same reasoning as .cta-banner — this photo
+   (balanza de la justicia, mesa de negociación) is thematic/decorative,
+   not a staff photo being obscured, so a legibility scrim is fine here —
+   unlike .hero/.hero__portrait, which stay untinted per the client's
+   explicit rule for real people's photos. Plain photographic scene (no
+   flat-colored block inside it like the Virgen artwork had), so `cover`
+   reads clean full-bleed with no visible seam. */
+body.body--arbitraje .page-hero {
+  background-image:
+    linear-gradient(180deg, rgba(19, 42, 76, 0.82) 0%, rgba(11, 27, 51, 0.9) 100%),
+    url('/assets/img/page-hero-arbitraje-bg.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+/* Centro de Arbitraje landing only (index.html): the hero band and the
+   "Nuestros pilares" band directly below it are both dark and sit flush
+   against each other with no visual break, so each one painting its own
+   independent `cover` background (previous approach) made the photo
+   visibly restart/seam at the boundary between them. Fix: move the photo
+   up to this shared wrapper around BOTH <section>s so `cover` sizes
+   against their combined height — one continuous image, no seam — and
+   neutralize the two inner backgrounds below so they don't paint over it
+   a second time. */
+body.body--arbitraje .arbitraje-landing-band {
+  background-image:
+    linear-gradient(180deg, rgba(19, 42, 76, 0.82) 0%, rgba(11, 27, 51, 0.9) 100%),
+    url('/assets/img/page-hero-arbitraje-bg.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+body.body--arbitraje .arbitraje-landing-band .page-hero {
+  background-image: none;
+}
+
+.arbitraje-landing-band .section--darker {
+  background: transparent;
+}
+
+/* Every other interior page: same artwork, full-bleed `cover` (client's
+   call — fill the whole band edge to edge, over keeping the Virgen fully
+   uncropped) so it reads the same way as the home teaser band below
+   instead of looking "cut in half" with a plain gradient half. */
+body:not(.body--arbitraje) .page-hero {
+  background-image:
+    linear-gradient(180deg, rgba(19, 42, 76, 0.86) 0%, rgba(11, 27, 51, 0.9) 100%),
+    url('/assets/img/page-hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+/* Home "Centro de Arbitraje" teaser band (not a .page-hero — plain
+   section--darker text block). Same artwork, horizontally mirrored
+   (page-hero-bg-flipped.jpg) so the handshake/balanza read first and the
+   Virgen lands clear of the text on this shorter block; `cover` here
+   since there's no "uncropped Virgen" requirement on this one. */
+.section--arbitraje-teaser {
+  background-image:
+    linear-gradient(180deg, rgba(19, 42, 76, 0.86) 0%, rgba(11, 27, 51, 0.9) 100%),
+    url('/assets/img/page-hero-bg-flipped.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+/* "Cómo lo garantizamos" band, repeated across the 4 Centro de Arbitraje
+   sub-pages (independencia, confidencialidad, árbitros especializados,
+   resolución de controversias). Reuses the same arbitraje theme photo as
+   .page-hero there, `cover` for a clean full-bleed band. */
+.section--arbitraje-band {
+  background-image:
+    linear-gradient(180deg, rgba(19, 42, 76, 0.82) 0%, rgba(11, 27, 51, 0.9) 100%),
+    url('/assets/img/page-hero-arbitraje-bg.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.page-hero--compact {
+  padding-block: var(--space-lg);
+}
+
+.page-hero h1 {
+  color: var(--color-white);
+  max-width: 24ch;
+  /* Base h1 is a fixed 3.75rem (60px); unscaled that overflows/clips long
+     titles ("Confidencialidad", "Conciliación en Contrataciones del
+     Estado") on a 375px viewport. Scale down like .hero__title does. */
+  font-size: clamp(2rem, 6vw, var(--fs-4xl));
+}
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3xs);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-on-dark-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.breadcrumb a {
+  color: var(--color-gold-light);
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Icon ---------- */
+.icon {
+  width: 40px;
+  height: 40px;
+  stroke-width: 1.5;
+  color: var(--color-gold);
+  flex-shrink: 0;
+}
+
+.icon--lg {
+  width: 56px;
+  height: 56px;
+}
+
+.icon--navy {
+  color: var(--color-navy);
+}
+
+.icon--on-dark {
+  color: var(--color-gold-light);
+}
+
+/* ---------- Cards ---------- */
+/* Folded corner (dog-ear), take 2 — the client's feedback on the first pass
+   (a flat gold triangle laid ON TOP of a plain rectangle) was fair: a
+   shape sitting over a rectangle still reads as a rectangle. This version
+   actually CUTS the corner off the card's own silhouette with clip-path,
+   so there is a genuine notch — then fills that notch with a separately
+   shaded flap that has its own highlight/shadow gradient (simulating the
+   lit topside of the folded paper vs. the crease) plus a drop shadow, so
+   it reads as a lifted, three-dimensional fold rather than a flat sticker.
+
+   Structure, because clip-path on .card would also clip its own ::before/
+   ::after (pseudo-elements are part of the same clipped box):
+     .card           — real element, transparent, holds the actual content
+                        (h3/p/etc.) and establishes the stacking context.
+     .card::before   — the visible "paper": white fill + border, clipped
+                        to a 5-point polygon with the corner notched out.
+                        z-index:-1 so it sits BEHIND the real content
+                        (positioned pseudo-elements otherwise paint above
+                        static in-flow content, which would hide the text).
+     .card::after    — the flap itself, unclipped, sitting exactly in the
+                        notch, z-index:2 so it layers above everything. */
+.card {
+  position: relative;
+  padding: var(--space-lg);
+  height: 100%;
+  isolation: isolate;
+  transition: transform var(--duration-base) var(--ease-standard);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  clip-path: polygon(0 0, calc(100% - 34px) 0, 100% 34px, 100% 100%, 0 100%);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--duration-base) var(--ease-standard);
+}
+
+.card:hover::before {
+  box-shadow: var(--shadow-md);
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  width: 34px;
+  height: 34px;
+  /* Diagonal light-to-shadow gradient across the flap itself, as if it
+     catches light on the fold edge and darkens toward the crease — this
+     is what sells "lifted paper" instead of a flat gold wedge. */
+  background: linear-gradient(135deg, var(--color-gold-light) 0%, var(--color-gold) 55%, #8a6a35 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  /* Shadow cast by the flap onto the card body beneath it, on the same
+     diagonal, plus the card's own notch edge is visible as a thin crease
+     line where the two surfaces meet. */
+  box-shadow: -4px 4px 8px rgba(11, 27, 51, 0.35);
+  transition: width var(--duration-base) var(--ease-standard),
+    height var(--duration-base) var(--ease-standard);
+}
+
+.card:hover::after {
+  width: 42px;
+  height: 42px;
+}
+
+.card__icon-wrap {
+  margin-bottom: var(--space-sm);
+}
+
+.card__title {
+  margin-bottom: var(--space-2xs);
+}
+
+.card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3xs);
+  margin-top: var(--space-sm);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  color: var(--color-navy);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--color-gold);
+  padding-bottom: 2px;
+}
+
+.card__link .icon {
+  width: 18px;
+  height: 18px;
+  transition: transform var(--duration-base) var(--ease-standard);
+}
+
+.card__link:hover .icon {
+  transform: translateX(4px);
+}
+
+/* ---------- Editorial card grammar (branch-card + pillar) ----------
+   Shared grammar for the conciliación "branch" cards and the arbitraje
+   "pillar" cards: no box shell (no background/shadow/radius distinct from
+   the section), no icon-wrap — a large gold numeral is the anchor, followed
+   by a serif title, a muted one-line description, and a hairline that grows
+   under the "Ver detalle" link on hover. Only the light/dark palette
+   differs between the two. Separation between items is a subtle 1px
+   divider grid (.grid--dividers / .pillars), not per-card borders. */
+
+/* ---------- Service branch cards (Conciliación, light) ---------- */
+.branch-card {
+  position: relative;
+  isolation: isolate;
+  padding: var(--space-lg) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Correction: clip-path on .branch-card itself also clipped its own
+   ::after flap (a pseudo-element is part of the SAME clipped box as its
+   parent) — the notch showed through empty, no gold, confirmed with a
+   real screenshot. Same fix as .card: the clipped surface moves to
+   ::before (behind content, z-index -1), leaving ::after free to paint
+   the flap unclipped on top. */
+.branch-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-bg);
+  clip-path: polygon(0 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 0 100%);
+}
+
+.branch-card::after,
+.pillar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, var(--color-gold-light) 0%, var(--color-gold) 55%, #8a6a35 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  box-shadow: -3px 3px 6px rgba(11, 27, 51, 0.3);
+}
+
+.branch-card__number,
+.pillar__index {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 5vw, 3rem);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-gold);
+  -webkit-text-stroke: 1px rgba(var(--color-gold-rgb), 0.4);
+  opacity: 0.92;
+  margin-bottom: var(--space-sm);
+}
+
+/* The shared numeral treatment above (mid-tone gold fill, low-alpha
+   stroke, <100% opacity) is tuned for a light/cream background
+   (.branch-card, conciliación). Against the dark arbitraje context
+   (.section--darker) that same low-contrast fill nearly disappears, so
+   pillars get a brighter, fully solid gold fill and drop the stroke. */
+.section--darker .pillar__index {
+  color: var(--color-gold-light);
+  -webkit-text-stroke: 0;
+  opacity: 1;
+}
+
+/* Divider grid: real per-item borders instead of the old "1px gap with the
+   container's background showing through" trick. That trick broke whenever
+   the item count wasn't an exact multiple of the column count (e.g. 5 cards
+   in a 3-column grid leaves one empty cell in the last row with nothing to
+   paint over it, so the container's border-color showed through solid
+   instead of as a hairline) — real borders have no such failure mode,
+   regardless of how many cards end up in the last row. */
+.grid--dividers {
+  gap: var(--space-lg);
+}
+
+.grid--dividers > * {
+  border-bottom: 1px solid var(--color-border);
+}
+
+@media (min-width: 900px) {
+  .grid--dividers > *:not(:nth-child(3n)) {
+    border-right: 1px solid var(--color-border);
+  }
+}
+
+/* ---------- Arbitraje pillars (dark, clearly separated) ---------- */
+.pillars {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.pillars > * {
+  border-bottom: 1px solid var(--color-border-on-dark);
+}
+
+@media (min-width: 900px) {
+  .pillars > *:not(:nth-child(2n)) {
+    border-right: 1px solid var(--color-border-on-dark);
+  }
+}
+
+/* Matches the .grid--3/.grid--4 breakpoint (base.css) used by the sibling
+   index-page card grid (conciliacion-extrajudicial/index.html service
+   cards), so both top-level index pages leave single-column at the same
+   viewport width instead of stacking at inconsistent breakpoints. */
+@media (min-width: 900px) {
+  .pillars {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1100px) {
+  .pillars {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.pillar {
+  /* .pillar had no visual anchor of its own: this background was
+     identical to .section--darker's (--color-navy-dark), so on the dark
+     arbitraje context each card was indistinguishable from the page and
+     from its siblings ("no se aprecia bien las cards ni sus contenidos").
+     A slightly lighter tint plus a thin gold top hairline (echoing the
+     original .branch-card top border from the very first iteration, before
+     it was flattened) gives each pillar a real, if subtle, boundary
+     without reintroducing a boxed/shadowed card. Applied directly on
+     .pillar (not gated behind a breakpoint or the column-divider grid) so
+     it shows at every viewport, including single-column mobile. */
+  position: relative;
+  isolation: isolate;
+  padding: var(--space-lg) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+/* Same correction as .branch-card: clip-path has to live on ::before (a
+   separate, unclipped layer), not on .pillar itself, or it clips away its
+   own ::after flap too. Background + top hairline move here together. */
+.pillar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: #1f2d43; /* fallback for browsers without color-mix() */
+  background: color-mix(in srgb, var(--color-navy-dark) 92%, var(--color-white) 8%);
+  border-top: 3px solid var(--color-gold);
+  clip-path: polygon(0 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 0 100%);
+}
+
+.pillar h3 {
+  color: var(--color-white);
+}
+
+.pillar p {
+  color: var(--color-text-on-dark-muted);
+  margin-bottom: 0;
+}
+
+.pillar .card__link {
+  color: var(--color-gold-light);
+  border-color: rgba(var(--color-gold-rgb), 0.35);
+}
+
+/* Hairline under the "Ver detalle" link: a faint 1px line at rest that
+   brightens/extends to full width on hover, replacing the old shadow-pop
+   hover on the card itself (the lift is handled by GSAP, see scroll-fx.js). */
+.branch-card .card__link,
+.pillar .card__link {
+  position: relative;
+  border-color: rgba(var(--color-gold-rgb), 0.35);
+  /* Pins the link to the bottom of the stretched flex column (.branch-card/
+     .pillar are display:flex;flex-direction:column;height:100%) so every
+     "Ver detalle" link lines up on the same row regardless of how many
+     lines the description above it wraps to. */
+  margin-top: auto;
+}
+
+.branch-card .card__link::after,
+.pillar .card__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: -1px;
+  height: 1px;
+  background: var(--color-gold);
+  transition: right var(--duration-base) var(--ease-standard);
+}
+
+.pillar .card__link::after {
+  background: var(--color-gold-light);
+}
+
+.branch-card .card__link:hover::after,
+.branch-card .card__link:focus-visible::after,
+.pillar .card__link:hover::after,
+.pillar .card__link:focus-visible::after {
+  right: 0;
+}
+
+/* ---------- Stats / trust strip ---------- */
+.trust-strip {
+  display: grid;
+  gap: var(--space-md);
+  text-align: center;
+}
+
+@media (min-width: 700px) {
+  .trust-strip {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.trust-strip__item {
+  padding: var(--space-md);
+  border-left: 2px solid var(--color-gold);
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  background: var(--color-navy-dark);
+  color: var(--color-text-on-dark-muted);
+  padding-block: var(--space-xl) var(--space-md);
+}
+
+.footer__grid {
+  display: grid;
+  gap: var(--space-lg);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--color-border-on-dark);
+}
+
+@media (min-width: 700px) {
+  .footer__grid {
+    grid-template-columns: 1.3fr 1fr 1fr;
+  }
+}
+
+.footer__logo-img {
+  height: 62px;
+  width: auto;
+  margin-bottom: var(--space-sm);
+}
+
+.footer__tagline {
+  /* Belt-and-suspenders on top of the p{color:inherit} fix: protects this
+     element specifically if the global rule ever changes again later. */
+  color: var(--color-text-on-dark-muted);
+}
+
+.footer__heading {
+  color: var(--color-white);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  margin-bottom: var(--space-sm);
+}
+
+.footer__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.footer__list a:hover {
+  color: var(--color-gold-light);
+}
+
+.footer__contact-item {
+  display: flex;
+  gap: var(--space-2xs);
+  align-items: flex-start;
+  margin-bottom: var(--space-xs);
+}
+
+.footer__contact-item .icon {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+}
+
+.footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--space-md);
+  font-size: var(--fs-xs);
+}
+
+/* ---------- Complaints book badge ---------- */
+.claims-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  padding: var(--space-2xs) var(--space-sm);
+  margin-top: var(--space-xs);
+  min-height: 44px;
+  transition: transform var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard);
+}
+
+.claims-badge:hover,
+.claims-badge:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.claims-badge img {
+  display: block;
+  height: 48px;
+  width: auto;
+}
+
+/* ---------- Forms ---------- */
+.form {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.form__row {
+  display: grid;
+  gap: var(--space-md);
+}
+
+@media (min-width: 700px) {
+  .form__row--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .form__row--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
+}
+
+.field label {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--color-navy);
+}
+
+.field .required {
+  color: var(--color-error);
+}
+
+.field input,
+.field textarea,
+.field select {
+  min-height: 48px;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  color: var(--color-navy);
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+
+.field textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  border-color: var(--color-gold);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(var(--color-gold-rgb), 0.25);
+}
+
+.field__hint {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.field--error input,
+.field--error textarea,
+.field--error select {
+  border-color: var(--color-error);
+}
+
+.field__error {
+  font-size: var(--fs-xs);
+  color: var(--color-error);
+  display: none;
+}
+
+.field--error .field__error {
+  display: block;
+}
+
+.fieldset {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+
+.fieldset legend {
+  font-family: var(--font-heading);
+  font-size: var(--fs-md);
+  padding-inline: var(--space-2xs);
+  color: var(--color-navy);
+}
+
+.radio-toggle {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.radio-toggle label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  min-height: 44px;
+  font-weight: 600;
+}
+
+.radio-toggle input {
+  accent-color: var(--color-gold);
+  width: 18px;
+  height: 18px;
+}
+
+.radio-toggle input:checked + span {
+  color: var(--color-navy);
+}
+
+.radio-toggle label:has(input:checked) {
+  border-color: var(--color-gold);
+  background: rgba(var(--color-gold-rgb), 0.08);
+}
+
+/* Honeypot field, hidden from real users, left for bots to fill in */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Cloudflare Turnstile renders a fixed-width (~300px) iframe widget that
+   doesn't shrink on its own; guard against it forcing horizontal overflow
+   on the narrowest supported phone widths. */
+.cf-turnstile {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.form__status {
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  display: none;
+}
+
+.form__status.is-visible {
+  display: block;
+}
+
+.form__status--success {
+  background: rgba(60, 122, 94, 0.12);
+  color: var(--color-success);
+  border: 1px solid var(--color-success);
+}
+
+.form__status--error {
+  background: rgba(156, 59, 59, 0.12);
+  color: var(--color-error);
+  border: 1px solid var(--color-error);
+}
+
+/* ---------- Info blocks ---------- */
+.info-block {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-lg);
+}
+
+.info-block + .info-block {
+  margin-top: var(--space-sm);
+}
+
+.placeholder-token {
+  background: rgba(var(--color-gold-rgb), 0.15);
+  color: var(--color-navy);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+/* ---------- Mission/vision block ---------- */
+.value-block {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+@media (min-width: 700px) {
+  .value-block {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.value-block__item {
+  border-left: 2px solid var(--color-gold);
+  padding-left: var(--space-md);
+}
+
+/* ---------- Utility layout for two-column content ---------- */
+.split {
+  display: grid;
+  gap: var(--space-xl);
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .split {
+    grid-template-columns: 1fr 1fr;
+  }
+  .split--reverse {
+    direction: rtl;
+  }
+  .split--reverse > * {
+    direction: ltr;
+  }
+}
+
+.image-frame {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-white);
+}
+
+.image-frame--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+  text-align: center;
+  padding: var(--space-lg);
+  background: repeating-linear-gradient(
+    45deg,
+    var(--color-white),
+    var(--color-white) 10px,
+    rgba(var(--color-navy-rgb), 0.04) 10px,
+    rgba(var(--color-navy-rgb), 0.04) 20px
+  );
+}
+
+/* ---------- CTA banner ---------- */
+.cta-banner {
+  /* Gradient is a legibility scrim for the white text on top, not a tint
+     hiding the photo (same distinction as the hero: this is a text-over-
+     image banner, so a scrim is the correct, expected use of an overlay
+     here — not the "no tint on photos" case, which was about obscuring
+     people's faces in the team/hero photos specifically). Falls back to
+     the plain gradient alone if cta-banner-bg.jpg is ever missing. */
+  background-image:
+    linear-gradient(135deg, rgba(19, 42, 76, 0.88) 0%, rgba(11, 27, 51, 0.92) 100%),
+    url('/assets/img/cta-banner-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  color: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  text-align: center;
+}
+
+.cta-banner h2 {
+  color: var(--color-white);
+}
+
+/* ---------- Layered photo hooks (institutional imagery) ----------
+   Same safe technique as .hero / .hero__portrait: a navy/gold gradient is
+   the base layer, the real photo is layered on top via a second
+   background-image, and the panel degrades gracefully (gradient only) if
+   that file hasn't been uploaded yet. Kept deliberately rare — a small
+   number of large, well-composed moments rather than a thumbnail on every
+   card (see the flattened .branch-card / .pillar in step 2).
+
+   Gallery-mat frame (client-approved "Option C"): a thick white mat around
+   the image, a gold outer border, a faint inset hairline right at the
+   photo's edge (the "fillet" line real picture framing uses between mat
+   and print), and a soft elevated shadow for depth. background-origin /
+   background-clip: content-box is what makes the gradient+photo paint only
+   inside the padding box, leaving the padding itself as the visible white
+   mat instead of being covered by the image. */
+.photo-panel {
+  position: relative;
+  min-height: 320px;
+  background-color: var(--color-white);
+  background-size: cover;
+  background-position: center;
+  background-origin: content-box;
+  background-clip: content-box;
+  padding: 20px;
+  border: 1.5px solid var(--color-gold);
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--color-navy-rgb), 0.12),
+    0 24px 48px -16px rgba(11, 27, 51, 0.35),
+    0 6px 16px -4px rgba(11, 27, 51, 0.18);
+}
+
+@media (min-width: 640px) {
+  .photo-panel {
+    padding: 28px;
+  }
+}
+
+/* No color overlay on any of these three — the client asked explicitly for
+   photos with no blue tint. Each just shows the real photo untinted once
+   uploaded; until then the .photo-panel white mat (or the plain navy-dark
+   background-color on the full-bleed band below) is the visible fallback. */
+.photo-panel--nosotros {
+  background-image: url('/assets/img/nosotros-oficina.jpg');
+}
+
+.photo-panel--conciliacion {
+  background-image: url('/assets/img/conciliacion-destacado.jpg');
+  /* Fixed, deliberate rectangular (landscape) shape at every width, instead
+     of inheriting whatever height the sibling text cards happen to need in
+     that grid row (which could render nearly square at some widths). 3:2 is
+     a classic photo rectangle; align-self:start opts this item out of the
+     grid row's default stretch so aspect-ratio actually takes effect rather
+     than being overridden by a stretched, definite height. */
+  aspect-ratio: 3 / 2;
+  align-self: start;
+  min-height: 0;
+  /* Biased up from dead-center so the faces (upper part of this portrait
+     source photo) stay in frame instead of being cropped by the 3:2 box. */
+  background-position: center 20%;
+}
+
+/* Client-supplied alternate crop, purpose-built landscape (faces already
+   well-composed with headroom, no need for the position bias above) —
+   used ONLY in the tablet width range where this cell renders as a wide
+   rectangle. Mobile (stacked, narrower) and desktop (wider grid) keep the
+   original portrait-sourced photo above; this swap changes nothing outside
+   this one breakpoint band. */
+@media (min-width: 640px) and (max-width: 1099px) {
+  .photo-panel--conciliacion {
+    background-image: url('/assets/img/conciliacion-destacado-tablet.jpg');
+    background-position: center;
+  }
+}
+
+/* One real consultation/office photo per Conciliación branch page, in the
+   .split intro section — replaces the generic icon-in-a-box
+   .image-frame--placeholder that used to sit there. */
+.photo-panel--familiar {
+  background-image: url('/assets/img/conciliacion-familiar.jpg');
+}
+
+.photo-panel--ambiental {
+  background-image: url('/assets/img/conciliacion-ambiental.jpg');
+}
+
+.photo-panel--laboral {
+  background-image: url('/assets/img/conciliacion-laboral.jpg');
+}
+
+.photo-panel--comercial {
+  background-image: url('/assets/img/conciliacion-comercial.jpg');
+}
+
+.photo-panel--contrataciones {
+  background-image: url('/assets/img/conciliacion-contrataciones-estado.jpg');
+}
+
+/* Same role as the .photo-panel--familiar group above, but shared across
+   the 4 Centro de Arbitraje sub-pages (independencia, confidencialidad,
+   árbitros especializados, resolución de controversias) — one photo
+   ("Mediación profesional ante la justicia") replacing the generic
+   .image-frame--placeholder icon box in each page's .split intro section. */
+.photo-panel--arbitraje-subpage {
+  background-image: url('/assets/img/arbitraje-subpage-bg.jpg');
+  background-position: center 20%;
+}
+
+.photo-panel--arbitraje-band {
+  /* Full-bleed band, not a contained card — the gallery-mat frame above
+     would fight the edge-to-edge effect, so it's reset here to a plain
+     cover image with no mat/border/shadow. */
+  min-height: 280px;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  background-color: var(--color-navy-dark);
+  background-origin: border-box;
+  background-clip: border-box;
+  background-image: url('/assets/img/arbitraje-sala.jpg');
+}
+
+@media (min-width: 900px) {
+  .photo-panel {
+    min-height: 420px;
+  }
+}
+
+/* ---------- Map embed placeholder ---------- */
+.map-frame {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+}
+
+.map-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ---------- Tabs (Trabaja con Nosotros) ---------- */
+.tabs__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--space-xl);
+}
+
+.tabs__btn {
+  padding: var(--space-sm) var(--space-2xs);
+  min-height: 44px;
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color var(--duration-base) var(--ease-standard),
+    border-color var(--duration-base) var(--ease-standard);
+}
+
+.tabs__btn:hover,
+.tabs__btn:focus-visible {
+  color: var(--color-navy);
+}
+
+.tabs__btn[aria-selected="true"] {
+  color: var(--color-navy);
+  border-bottom-color: var(--color-gold);
+}
+
+.tabs__panel[hidden] {
+  display: none;
+}
+
+/* ---------- Team grid (Nuestro equipo de trabajo) ---------- */
+.team-grid {
+  display: grid;
+  gap: var(--space-2xl);
+}
+
+@media (min-width: 900px) {
+  .team-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.team-member__name {
+  margin-top: var(--space-md);
+  margin-bottom: 0;
+  /* Reserves space for 2 lines always, so a short 1-line name (e.g. "Jorge
+     Enrique Ortega Noriega") doesn't leave its whole column — title,
+     description, "Resolución de acreditación" label, PDF frame — sitting
+     higher than the sibling column whose name actually wraps to 2 lines.
+     align-items:flex-end puts a short name at the BOTTOM of that reserved
+     space, where a wrapped name's second line would land, so what comes
+     next lines up either way. */
+  min-height: calc(var(--fs-2xl) * var(--lh-tight) * 2);
+  display: flex;
+  align-items: flex-end;
+}
+
+/* Square frame matching the client-supplied 1024×1024 headshots exactly —
+   background-size:cover then shows the ENTIRE photo with no cropping,
+   instead of inheriting .photo-panel's taller default box (tuned for wide
+   landscape institutional photos) and cutting off the top of the head. */
+.team-member__photo {
+  aspect-ratio: 1 / 1;
+  min-height: 0;
+}
+
+.team-member__title {
+  color: var(--color-gold);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  font-size: var(--fs-sm);
+  margin-bottom: var(--space-md);
+}
+
+/* View-only document frame: same bordered treatment as .map-frame, used
+   for the "resolución" PDFs. Portrait ratio to match a typical document
+   page instead of the map's wide 16:10. */
+.pdf-frame {
+  position: relative;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  background: var(--color-bg);
+}
+
+.pdf-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.pdf-frame__unavailable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: var(--space-lg);
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+}
+
+.pdf-frame__note {
+  margin-top: var(--space-2xs);
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}

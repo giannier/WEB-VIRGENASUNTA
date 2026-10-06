@@ -1,0 +1,101 @@
+<?php
+$page_title = 'Centro de Arbitraje | Virgen Asunta';
+$page_description = 'Centro de Arbitraje Virgen Asunta: independencia, confidencialidad, árbitros especializados y resolución de controversias con la solidez de un laudo arbitral.';
+$canonical_path = '/centro-arbitraje/';
+$body_class = 'body--arbitraje';
+require __DIR__ . '/../partials/header.php';
+?>
+
+<div class="arbitraje-landing-band">
+  <section class="page-hero">
+    <div class="container">
+      <p class="breadcrumb"><a href="/">Inicio</a> / Centro de Arbitraje</p>
+      <img src="/assets/img/icon-scale-gold.png" alt="" width="400" height="432" style="width:56px;height:auto;margin-bottom:var(--space-sm);">
+      <p class="kicker">Sección independiente</p>
+      <h1>Centro de Arbitraje</h1>
+      <p style="max-width:56ch;color:var(--color-text-on-dark-muted);">Un mecanismo alterno de resolución de controversias, distinto e independiente de la conciliación extrajudicial, diseñado para casos que requieren un pronunciamiento definitivo con la solidez de un laudo arbitral.</p>
+      <a class="btn btn--primary" href="/contacto.html" style="margin-top:var(--space-sm);">Agendar consulta</a>
+    </div>
+  </section>
+
+  <section class="section--darker" style="padding-block:var(--space-lg);">
+    <div class="container">
+      <p class="kicker">Nuestros pilares</p>
+      <h2 style="color:var(--color-white);">Cuatro pilares, claramente separados</h2>
+      <hr class="divider">
+
+      <div class="pillars" style="margin-top:var(--space-lg);">
+        <div class="pillar reveal">
+          <p class="pillar__index">01</p>
+          <h3>Independencia</h3>
+          <p>Los árbitros actúan con total autonomía frente a las partes, garantizando decisiones imparciales basadas únicamente en el derecho y las pruebas del caso.</p>
+          <a class="card__link" href="/centro-arbitraje/independencia.html">Ver detalle <svg class="icon" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+        <div class="pillar reveal">
+          <p class="pillar__index">02</p>
+          <h3>Confidencialidad</h3>
+          <p>El procedimiento arbitral se desarrolla en reserva, protegiendo la información sensible de las partes durante y después del proceso.</p>
+          <a class="card__link" href="/centro-arbitraje/confidencialidad.html">Ver detalle <svg class="icon" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+        <div class="pillar reveal">
+          <p class="pillar__index">03</p>
+          <h3>Árbitros especializados</h3>
+          <p>Contamos con un cuerpo arbitral especializado por materia, asegurando decisiones técnicamente sólidas y jurídicamente fundamentadas.</p>
+          <a class="card__link" href="/centro-arbitraje/arbitros-especializados.html">Ver detalle <svg class="icon" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+        <div class="pillar reveal">
+          <p class="pillar__index">04</p>
+          <h3>Resolución de controversias</h3>
+          <p>Emitimos laudos con carácter definitivo y vinculante, brindando una solución firme que pone fin a la controversia de forma eficaz.</p>
+          <a class="card__link" href="/centro-arbitraje/resolucion-controversias.html">Ver detalle <svg class="icon" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="section section--white">
+  <div class="container split">
+    <div>
+      <p class="kicker">¿Por qué arbitraje?</p>
+      <h2>Cuando el caso exige una decisión definitiva</h2>
+      <hr class="divider">
+      <p>A diferencia de la conciliación, donde las partes construyen su propio acuerdo, el arbitraje culmina con un laudo emitido por el árbitro o tribunal arbitral, con la misma fuerza que una sentencia judicial. Es el mecanismo idóneo para controversias complejas que requieren un pronunciamiento técnico y definitivo.</p>
+      <p>Nuestro Centro administra el proceso arbitral de principio a fin, garantizando el respeto al debido proceso y a los plazos pactados por las partes.</p>
+      <a class="btn btn--outline" href="/contacto.html">Consultar sobre arbitraje</a>
+    </div>
+    <div class="trust-strip">
+      <div class="trust-strip__item">
+        <h3 style="margin-bottom:0;">4</h3>
+        <p class="text-muted">Pilares que sostienen cada proceso arbitral</p>
+      </div>
+      <div class="trust-strip__item">
+        <h3 style="margin-bottom:0;">1</h3>
+        <p class="text-muted">Laudo definitivo y vinculante</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<?php if (file_exists(VA_ROOT . '/assets/img/arbitraje-sala.jpg')): ?>
+<section class="section--darker" style="padding-block:0;">
+  <!-- Layered-background photo hook (same safe technique as .hero /
+       .hero__portrait / nosotros.html): gradient placeholder + real photo
+       layered via background-image. Guarded so the section only renders
+       once the real photo file is actually present (previously rendered
+       as a bare, purposeless gradient stripe). -->
+  <div class="photo-panel photo-panel--arbitraje-band reveal" role="img" aria-label="Sala de audiencias del Centro de Arbitraje"></div>
+</section>
+<?php endif; ?>
+
+<section class="section section--tight section--white">
+  <div class="container">
+    <div class="cta-banner">
+      <h2>¿Tu caso requiere un laudo definitivo?</h2>
+      <p style="color:var(--color-text-on-dark-muted);max-width:56ch;margin-inline:auto;">Escríbenos y evaluamos si el arbitraje es la vía adecuada para tu controversia.</p>
+      <a class="btn btn--primary" href="/contacto.html" style="margin-top:var(--space-md);">Agendar consulta</a>
+    </div>
+  </div>
+</section>
+
+<?php require __DIR__ . '/../partials/footer.php'; ?>

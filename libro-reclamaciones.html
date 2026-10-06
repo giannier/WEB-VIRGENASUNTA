@@ -1,0 +1,170 @@
+<?php
+$page_title = 'Libro de Reclamaciones | Virgen Asunta';
+$page_description = 'Libro de Reclamaciones de Virgen Asunta - Centro de Conciliación y Arbitraje. Registra tu reclamo o queja conforme a la normativa de protección al consumidor.';
+$canonical_path = '/libro-reclamaciones.html';
+$extra_head = '<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>';
+require __DIR__ . '/partials/header.php';
+
+$config = va_config();
+$razonSocial = $config['company_legal_name'] ?? '{{RAZON_SOCIAL}}';
+$ruc = $config['company_ruc'] ?? '{{RUC_EMPRESA}}';
+$emailReclamos = $config['complaints_email'] ?? '{{EMAIL_RECLAMOS}}';
+$turnstileSiteKey = $config['turnstile_site_key'] ?? '{{TURNSTILE_SITE_KEY}}';
+$csrfToken = va_csrf_token();
+?>
+
+<section class="page-hero page-hero--compact">
+  <div class="container">
+    <p class="breadcrumb"><a href="/">Inicio</a> / Libro de Reclamaciones</p>
+    <p class="kicker">Protección al consumidor</p>
+    <h1>Libro de Reclamaciones</h1>
+    <p style="max-width:60ch;color:var(--color-text-on-dark-muted);">Conforme a la normativa de protección al consumidor, todo proveedor debe contar con un Libro de Reclamaciones a disposición de sus usuarios.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container container--narrow">
+
+    <div class="info-block">
+      <h2 style="margin-bottom:var(--space-2xs);">¿Qué diferencia hay entre un Reclamo y una Queja?</h2>
+      <p class="text-muted"><strong>Reclamo:</strong> disconformidad relacionada al producto o servicio contratado.</p>
+      <p class="text-muted" style="margin-bottom:0;"><strong>Queja:</strong> disconformidad no relacionada al producto o servicio, como una mala atención al cliente.</p>
+    </div>
+
+    <div class="info-block">
+      <h2 style="margin-bottom:var(--space-2xs);">Datos del proveedor</h2>
+      <p class="text-muted">Razón Social: <span class="placeholder-token"><?= va_e($razonSocial) ?></span> — RUC: <span class="placeholder-token"><?= va_e($ruc) ?></span></p>
+      <p class="text-muted" style="margin-bottom:0;">Domicilio: Av. República de Chile 324, Oficina 601, Jesús María, Lima, Perú</p>
+    </div>
+
+    <div class="info-block">
+      <p class="text-muted" style="margin-bottom:0;">Los reclamos y quejas registrados son recibidos y atendidos a través de nuestro correo dedicado: <strong><?= va_e($emailReclamos) ?></strong>. Recibirás una copia de tu registro y una respuesta en el plazo que establece la normativa vigente.</p>
+    </div>
+
+    <form id="complaintForm" class="form" style="margin-top:var(--space-xl);" novalidate>
+      <div class="form__status" data-form-status></div>
+
+      <!-- Honeypot field: must remain empty. Hidden from real users via CSS,
+           left for automated bots to fill in and be silently rejected server-side. -->
+      <div class="hp-field" aria-hidden="true">
+        <label for="website_url">No completar este campo</label>
+        <input type="text" id="website_url" name="website_url" tabindex="-1" autocomplete="off">
+      </div>
+
+      <input type="hidden" name="csrf_token" value="<?= va_e($csrfToken) ?>">
+
+      <fieldset class="fieldset">
+        <legend>Tipo de solicitud</legend>
+        <div class="radio-toggle">
+          <label><input type="radio" name="tipo" value="reclamo" checked><span>Reclamo</span></label>
+          <label><input type="radio" name="tipo" value="queja"><span>Queja</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend>Datos del consumidor</legend>
+        <div class="form__row form__row--2">
+          <div class="field">
+            <label for="consumerName">Nombre completo <span class="required">*</span></label>
+            <input type="text" id="consumerName" name="consumer_name" maxlength="150" required autocomplete="name">
+            <span class="field__error">Ingresa tu nombre completo.</span>
+          </div>
+          <div class="field">
+            <label for="docNumber">N.º de documento <span class="required">*</span></label>
+            <div style="display:flex;gap:var(--space-2xs);">
+              <select name="consumer_doc_type" style="max-width:110px;min-height:48px;border:1px solid var(--color-border);border-radius:var(--radius-sm);">
+                <option value="DNI">DNI</option>
+                <option value="CE">CE</option>
+              </select>
+              <input type="text" id="docNumber" name="consumer_doc_number" maxlength="20" required style="flex:1;">
+            </div>
+            <span class="field__error">Ingresa tu número de documento.</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="consumerAddress">Domicilio <span class="required">*</span></label>
+          <input type="text" id="consumerAddress" name="consumer_address" maxlength="200" required autocomplete="street-address">
+          <span class="field__error">Ingresa tu domicilio.</span>
+        </div>
+
+        <div class="form__row form__row--2">
+          <div class="field">
+            <label for="consumerPhone">Teléfono <span class="required">*</span></label>
+            <input type="tel" id="consumerPhone" name="consumer_phone" maxlength="20" required pattern="[0-9+()\-\s]{6,20}" autocomplete="tel">
+            <span class="field__error">Ingresa un teléfono válido.</span>
+          </div>
+          <div class="field">
+            <label for="consumerEmail">Correo electrónico <span class="required">*</span></label>
+            <input type="email" id="consumerEmail" name="consumer_email" maxlength="150" required autocomplete="email">
+            <span class="field__error">Ingresa un correo electrónico válido.</span>
+          </div>
+        </div>
+
+        <div class="field" style="flex-direction:row;align-items:center;gap:var(--space-2xs);min-height:44px;">
+          <input type="checkbox" id="isMinor" name="is_minor" value="1" style="width:20px;height:20px;flex-shrink:0;accent-color:var(--color-gold);">
+          <label for="isMinor" style="margin:0;display:flex;align-items:center;min-height:44px;cursor:pointer;">El consumidor es menor de edad (requiere datos del apoderado/tutor)</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset" id="guardianFieldset" hidden>
+        <legend>Datos del apoderado / tutor</legend>
+        <div class="form__row form__row--2">
+          <div class="field">
+            <label for="guardianName">Nombre completo del apoderado</label>
+            <input type="text" id="guardianName" name="guardian_name" maxlength="150">
+          </div>
+          <div class="field">
+            <label for="guardianDoc">N.º de documento del apoderado</label>
+            <input type="text" id="guardianDoc" name="guardian_doc_number" maxlength="20">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend>Datos del bien contratado</legend>
+        <div class="radio-toggle">
+          <label><input type="radio" name="bien_tipo" value="servicio" checked><span>Servicio</span></label>
+          <label><input type="radio" name="bien_tipo" value="producto"><span>Producto</span></label>
+        </div>
+        <div class="field" style="margin-top:var(--space-sm);">
+          <label for="bienDescripcion">Descripción del producto o servicio <span class="required">*</span></label>
+          <input type="text" id="bienDescripcion" name="bien_descripcion" maxlength="300" required>
+          <span class="field__error">Describe el producto o servicio.</span>
+        </div>
+        <div class="form__row form__row--2">
+          <div class="field">
+            <label for="montoReclamado">Monto reclamado (S/)</label>
+            <input type="text" id="montoReclamado" name="monto_reclamado" maxlength="30" inputmode="decimal">
+          </div>
+          <div class="field">
+            <label for="fechaOcurrencia">Fecha del hecho</label>
+            <input type="date" id="fechaOcurrencia" name="fecha_ocurrencia">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend>Detalle</legend>
+        <div class="field">
+          <label for="detalle">Detalle del reclamo / queja <span class="required">*</span></label>
+          <textarea id="detalle" name="detalle" maxlength="3000" required></textarea>
+          <span class="field__error">Describe el detalle de tu reclamo o queja.</span>
+        </div>
+        <div class="field">
+          <label for="pedido">Pedido del consumidor <span class="required">*</span></label>
+          <textarea id="pedido" name="pedido" maxlength="2000" required></textarea>
+          <span class="field__error">Indica qué solicitas como solución.</span>
+        </div>
+      </fieldset>
+
+      <div class="cf-turnstile" data-sitekey="<?= va_e($turnstileSiteKey) ?>"></div>
+
+      <button type="submit" class="btn btn--primary">Enviar reclamo</button>
+      <p class="field__hint">Al enviar, recibirás una copia de tu registro en tu correo electrónico. Indecopi establece que tu solicitud será atendida en el plazo que establece la normativa vigente.</p>
+    </form>
+  </div>
+</section>
+
+<?php require __DIR__ . '/partials/footer.php'; ?>
+<script src="/assets/js/complaint-form.js" defer></script>

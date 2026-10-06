@@ -1,0 +1,14 @@
+# Real config with live values (emails, salt) — config.example.php is the template that stays tracked
+config/config.php
+
+# Working/debug artifacts from the build process, not part of the site
+scratchpad_local/
+contenido/
+
+# Tooling caches
+.atl/
+.claude/
+
+# OS junk
+.DS_Store
+Thumbs.db

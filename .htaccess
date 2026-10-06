@@ -1,0 +1,64 @@
+# Virgen Asunta - Centro de Conciliación y Arbitraje
+# Root Apache configuration.
+
+# Treat .html/.htm as PHP so partials/header.php + footer.php can be
+# included from pretty URLs without a .php extension.
+AddType application/x-httpd-php .html .htm
+
+# Ensure /conciliacion-extrajudicial/ resolves to its index.html directory index.
+DirectoryIndex index.html index.php
+
+# ---------- HTTPS ----------
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# ---------- Security headers ----------
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; frame-src https://challenges.cloudflare.com https://www.google.com; connect-src 'self' https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; frame-ancestors 'self'"
+</IfModule>
+
+# ---------- Directory listing ----------
+Options -Indexes
+Options +FollowSymLinks -MultiViews
+
+# ---------- Deny direct access to sensitive files ----------
+<FilesMatch "^config\.php$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+<FilesMatch "\.(env|sqlite|log)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# api/data/ has its own .htaccess denying all direct access as well
+# (defense in depth), see api/data/.htaccess.
+
+# ---------- Default charset ----------
+AddDefaultCharset UTF-8
+
+# ---------- Legacy URL redirects ----------
+# Centro de Arbitraje was restructured from a single page into its own
+# directory (overview + one page per pillar), mirroring
+# /conciliacion-extrajudicial/. Redirect the old URL in case anything
+# still links to it.
+Redirect 301 /centro-arbitraje.html /centro-arbitraje/
+
+# ---------- Custom error pages could be added here later ----------

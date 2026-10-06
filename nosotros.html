@@ -1,0 +1,86 @@
+<?php
+$page_title = 'Nosotros | Virgen Asunta - Centro de Conciliación y Arbitraje';
+$page_description = 'Conoce el posicionamiento institucional y la propuesta de valor de Virgen Asunta, Centro de Conciliación y Arbitraje en Lima, Perú.';
+$canonical_path = '/nosotros.html';
+require __DIR__ . '/partials/header.php';
+?>
+
+<section class="page-hero page-hero--compact">
+  <div class="container">
+    <p class="breadcrumb"><a href="/">Inicio</a> / Nosotros</p>
+    <p class="kicker">Nosotros</p>
+    <h1>Posicionamiento institucional y propuesta de valor</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container split">
+    <div>
+      <p>Virgen Asunta es un Centro de Conciliación y Arbitraje que nace con el propósito de ofrecer a personas, familias, empresas y entidades del Estado una vía seria, confiable y eficiente para resolver sus controversias, sin renunciar a la calidad ni a la seguridad jurídica que exige cada caso.</p>
+      <p>Creemos que el diálogo, bien conducido, es capaz de construir soluciones más duraderas que un litigio prolongado. Por ello, nuestro equipo de conciliadores y árbitros combina formación especializada, experiencia práctica y un compromiso permanente con la ética profesional en cada procedimiento que administramos.</p>
+      <p>Atendemos cinco especialidades de conciliación extrajudicial —familiar, ambiental, laboral, comercial y en contrataciones del Estado— y contamos con un Centro de Arbitraje independiente para las controversias que requieren un pronunciamiento definitivo. Esta doble capacidad nos permite acompañar a nuestros usuarios en la vía que mejor se ajuste a su necesidad.</p>
+      <p>Operamos bajo estrictos estándares de confidencialidad, imparcialidad y celeridad, con la convicción de que cada acuerdo alcanzado —o cada laudo emitido— debe fortalecer la confianza de las partes en los mecanismos alternos de resolución de conflictos.</p>
+    </div>
+    <!-- Layered-background photo hook (same safe technique as .hero /
+         .hero__portrait / the Inicio sixth-block): gradient placeholder
+         visible now, real photo layers on top and activates automatically
+         the moment assets/img/nosotros-oficina.jpg exists — no code changes
+         needed then. Always rendered (not file_exists-gated) so the slot is
+         visible as a placeholder, matching how Inicio's sixth block works. -->
+    <div class="photo-panel photo-panel--nosotros" role="img" aria-label="Oficina institucional de Virgen Asunta"></div>
+  </div>
+</section>
+
+<section class="section section--white">
+  <div class="container">
+    <p class="kicker">Nuestros principios</p>
+    <h2>Misión y visión</h2>
+    <hr class="divider">
+    <div class="value-block" style="margin-top:var(--space-lg);">
+      <div class="value-block__item">
+        <h3>Misión</h3>
+        <p class="text-muted">Facilitar la resolución de controversias familiares, ambientales, laborales, comerciales y de contrataciones con el Estado, mediante procesos de conciliación y arbitraje conducidos con imparcialidad, confidencialidad y rigor técnico, construyendo soluciones que las partes puedan cumplir con confianza.</p>
+      </div>
+      <div class="value-block__item">
+        <h3>Visión</h3>
+        <p class="text-muted">Ser un centro de referencia en Lima para la resolución alterna de controversias, reconocido por la calidad de sus conciliadores y árbitros, la solidez de sus procesos y su aporte a una cultura de diálogo frente al litigio.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <p class="kicker">Lo que nos distingue</p>
+    <h2>Nuestra propuesta de valor</h2>
+    <hr class="divider">
+    <div class="grid grid--3" style="margin-top:var(--space-lg);">
+      <div class="card">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 7v4c0 5 3.4 8.8 8 10 4.6-1.2 8-5 8-10V7l-8-4Z" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        <h3 class="card__title">Confidencialidad</h3>
+        <p class="text-muted">Cada procedimiento se conduce bajo estricta reserva de la información de las partes.</p>
+      </div>
+      <div class="card">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-width="1.5"/><path d="M12 7v5l3.5 2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h3 class="card__title">Celeridad</h3>
+        <p class="text-muted">Procesos ágiles que evitan la extensión y el costo de un litigio judicial.</p>
+      </div>
+      <div class="card">
+        <img class="icon" src="/assets/img/icon-lawyer-gold.png" alt="" width="400" height="461" style="width:40px;height:auto;">
+        <h3 class="card__title">Especialización</h3>
+        <p class="text-muted">Conciliadores y árbitros formados específicamente en cada materia que atendemos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight section--white">
+  <div class="container">
+    <div class="cta-banner">
+      <h2>Conversemos sobre tu caso</h2>
+      <a class="btn btn--primary" href="/contacto.html" style="margin-top:var(--space-md);">Agendar consulta</a>
+    </div>
+  </div>
+</section>
+
+<?php require __DIR__ . '/partials/footer.php'; ?>

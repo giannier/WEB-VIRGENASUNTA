@@ -1,0 +1,95 @@
+<?php
+$page_title = 'Contacto | Virgen Asunta - Centro de Conciliación y Arbitraje';
+$page_description = 'Contáctanos: Av. República de Chile 324, Oficina 601, Jesús María, Lima, Perú. Completa el formulario de solicitud de información y agenda tu consulta.';
+$canonical_path = '/contacto.html';
+require __DIR__ . '/partials/header.php';
+$contact_email = va_config()['contact_email'] ?? '{{EMAIL_CONTACTO}}';
+?>
+
+<section class="page-hero page-hero--compact">
+  <div class="container">
+    <p class="breadcrumb"><a href="/">Inicio</a> / Contacto</p>
+    <p class="kicker">Contacto</p>
+    <h1>Conversemos sobre tu caso</h1>
+    <p style="max-width:56ch;color:var(--color-text-on-dark-muted);">Completa el formulario y nuestro equipo se pondrá en contacto contigo para orientarte sobre el servicio más adecuado.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container split">
+    <div>
+      <p class="kicker">Formulario de solicitud de información</p>
+      <h2>Escríbenos</h2>
+      <hr class="divider">
+
+      <form id="contactForm" class="form" novalidate data-contact-email="<?= va_e($contact_email) ?>">
+        <div class="form__status" data-form-status></div>
+
+        <div class="form__row form__row--2">
+          <div class="field">
+            <label for="contactName">Nombre completo <span class="required">*</span></label>
+            <input type="text" id="contactName" name="name" maxlength="150" required autocomplete="name">
+            <span class="field__error">Ingresa tu nombre completo.</span>
+          </div>
+          <div class="field">
+            <label for="contactPhone">Teléfono <span class="required">*</span></label>
+            <input type="tel" id="contactPhone" name="phone" maxlength="20" required autocomplete="tel" pattern="[0-9+()\-\s]{6,20}">
+            <span class="field__error">Ingresa un teléfono válido.</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="contactEmail">Correo electrónico <span class="required">*</span></label>
+          <input type="email" id="contactEmail" name="email" maxlength="150" required autocomplete="email">
+          <span class="field__error">Ingresa un correo electrónico válido.</span>
+        </div>
+
+        <div class="field">
+          <label for="contactSubject">Motivo de consulta <span class="required">*</span></label>
+          <select id="contactSubject" name="subject" required>
+            <option value="">Selecciona una opción</option>
+            <option value="Conciliación Familiar">Conciliación Familiar</option>
+            <option value="Conciliación Ambiental">Conciliación Ambiental</option>
+            <option value="Conciliación Laboral">Conciliación Laboral</option>
+            <option value="Conciliación Comercial">Conciliación Comercial</option>
+            <option value="Conciliación en Contrataciones del Estado">Conciliación en Contrataciones del Estado</option>
+            <option value="Centro de Arbitraje">Centro de Arbitraje</option>
+            <option value="Otro">Otro</option>
+          </select>
+          <span class="field__error">Selecciona el motivo de tu consulta.</span>
+        </div>
+
+        <div class="field">
+          <label for="contactMessage">Mensaje <span class="required">*</span></label>
+          <textarea id="contactMessage" name="message" maxlength="2000" required></textarea>
+          <span class="field__error">Cuéntanos brevemente tu caso.</span>
+        </div>
+
+        <button type="submit" class="btn btn--primary">Enviar solicitud</button>
+        <p class="field__hint">Al enviar este formulario se abrirá tu cliente de correo para completar el envío a nuestro equipo.</p>
+      </form>
+    </div>
+
+    <div>
+      <div class="info-block">
+        <h3>Dirección</h3>
+        <p class="text-muted">Av. República de Chile 324, Oficina 601, Jesús María, Lima, Perú</p>
+      </div>
+      <div class="info-block">
+        <h3>Correo</h3>
+        <p class="text-muted"><?= va_e($contact_email) ?></p>
+      </div>
+      <div class="map-frame" style="margin-top:var(--space-md);">
+        <iframe
+          src="https://www.google.com/maps?q=Av.+Rep%C3%BAblica+de+Chile+324,+Jes%C3%BAs+Mar%C3%ADa,+Lima,+Peru&output=embed"
+          title="Ubicación de Virgen Asunta en el mapa"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<?php require __DIR__ . '/partials/footer.php'; ?>
+<script src="/assets/js/contact-form.js" defer></script>
